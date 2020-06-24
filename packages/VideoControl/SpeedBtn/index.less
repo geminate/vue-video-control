@@ -1,0 +1,47 @@
+// 播放速度控制按钮
+.speed-btn {
+  position: relative;
+
+  .text {
+    line-height: 44px;
+    text-align: center;
+    color: white;
+    color: rgba(255, 255, 255, .8);
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .speed-dropdown-menu {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 70px;
+    background: rgb(40, 40, 40);
+    opacity: 0;
+    transform: translate(-17px, -100%) scaleY(0);
+    transform-origin: center bottom;
+    transition: transform .3s cubic-bezier(.23, 1, .32, 1), opacity .3s cubic-bezier(.23, 1, .32, 1);
+
+    &.show {
+      opacity: 1;
+      transform: translate(-17px, -100%) scaleY(1);
+    }
+
+    .speed-dropdown-item {
+      line-height: 36px;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+
+      &:hover {
+        background: #4B4B4B;
+      }
+
+      &.active {
+        color: cornflowerblue;
+      }
+    }
+  }
+}
