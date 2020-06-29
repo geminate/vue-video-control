@@ -245,3 +245,7 @@
 <style lang="less" scoped>
   @import url("index.less");
 </style>
+
+<style>
+  @import '../assets/icon/iconfont.css';
+</style>

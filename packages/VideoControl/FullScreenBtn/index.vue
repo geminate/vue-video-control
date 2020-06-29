@@ -1,6 +1,7 @@
 <!-- 全屏按钮 -->
 <template>
-  <div class="full-screen-btn" @click="onClick"></div>
+  <div class="full-screen-btn iconfont" :class="[isFullScreen ? 'icon-full-screen-exit':'icon-full-screen-line']"
+       @click="onClick"></div>
 </template>
 
 <script>

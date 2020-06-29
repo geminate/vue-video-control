@@ -1,7 +1,7 @@
 <!-- 音量按钮 -->
 <template>
   <div class="volume-button" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
-    <div class="icon" :class="{'mute': volume === 0}" @click="toggleMute"></div>
+    <div class="icon iconfont" :class="[volume === 0 ? 'icon-volume-mute':'icon-volume']" @click="toggleMute"></div>
     <div class="dropdown-menu" :class="{'show':showDropDown}">
       <div class="text">{{volume}}%</div>
       <volume-slider v-model="volume"></volume-slider>

@@ -1,6 +1,6 @@
 <!-- 播放/暂停 按钮 -->
 <template>
-  <div class="play-btn" @click="onClick" :class="{'pause': playStatus}"></div>
+  <div class="play-btn iconfont" @click="onClick" :class="[playStatus ? 'icon-pause':'icon-play']"></div>
 </template>
 
 <script>

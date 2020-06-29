@@ -1,4 +1,12 @@
 module.exports = {
+  css: {
+    extract: false
+  },
+  configureWebpack: {
+    output: {
+      libraryExport: 'default'
+    }
+  },
   pages: {
     index: {
       entry: 'examples/main.js',
