@@ -1,9 +1,9 @@
 {
   "name": "vue-video-control",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue 视频播放组件，包含自定义控制、高能进度条、滑动预览等功能",
   "private": false,
-  "main": "packages/index.js",
+  "main": "dist/vue-video-control.umd.js",
   "author": "geminate",
   "license": "MIT",
   "repository": {

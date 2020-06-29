@@ -8,11 +8,9 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 150px;
-    height: 150px;
-    background-image: url('../assets/images/loading.gif');
-    background-size: 100% 100%;
-    transform: translate(-50%, -50%);
+    color: rgb(230, 230, 230);
+    font-size: 24px;
+    animation: rotate 2s linear infinite;
   }
 
   // 视频主体
@@ -76,3 +74,14 @@
     }
   }
 }
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

@@ -3,7 +3,7 @@
   <div class="video-control" ref="videoControl">
 
     <!-- loading 标识 -->
-    <div class="loading" v-show="showLoading"></div>
+    <div class="loading iconfont icon-loading" v-show="showLoading"></div>
 
     <!-- 视频主体 -->
     <video ref="video"
