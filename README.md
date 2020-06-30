@@ -53,7 +53,7 @@ Vue.use(VideoControl)
 | control.focusPreview.data      | array    | [1]                    | The data array of focus preview bar 
 | control.videoPreview.show      | boolean  | false                  | Display video preview image
 | control.videoPreview.imgUrl    | string   | ''                     | The image url of video preview.The image must be an single line sprite image and each of the part should be 160*90. See /public/video-preview.jpg 
-| control.videoPreview.totalNum  | string   | ''                     | Number of the sprite image 
+| control.videoPreview.totalNum  | number   | 10                     | Number of the sprite image 
 | control.videoTimer.show        | boolean  | true                   | Display video <current time / duration> timer 
 | control.speedBtn.show          | boolean  | true                   | Display the button to change playback speed
 | control.speedBtn.speedArray    | array    | [0.5, 0.75, 1, 1.5, 2] | Playback speed options
