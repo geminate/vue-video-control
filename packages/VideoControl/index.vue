@@ -13,6 +13,7 @@
            :src="opt.src"
            @loadstart="onLoadStart"
            @canplay="onCanPlay"
+           @canplaythrough="onCanplaythrough"
            @durationchange="onDurationChange"
            @timeupdate="onTimeUpdate"
            @play="onPlay"
@@ -22,6 +23,10 @@
            @waiting="onWaiting"
            @seeking="onSeeking"
            @seeked="onSeeked"
+           @ended="onEnded"
+           @error="onError"
+           @ratechange="onRateChange"
+           @volumechange="onVolumeChange"
     >
     </video>
 
@@ -147,62 +152,98 @@
       },
 
       // 视频变为播放状态 同步 playStatus
-      onPlay () {
+      onPlay (e) {
         this.playStatus = true
+        this.$emit('play', e)
       },
 
       // 视频变为暂停状态 同步 playStatus
-      onPause () {
+      onPause (e) {
         this.playStatus = false
+        this.$emit('pause', e)
       },
 
       // 视频开始加载 展示loading
-      onLoadStart () {
+      onLoadStart (e) {
         this.showLoading = true
+        this.$emit('loadStart', e)
       },
 
       // 视频最初加载完成 隐藏loading
-      onCanPlay () {
+      onCanPlay (e) {
         this.showLoading = false
+        this.$emit('canPlay', e)
+      },
+
+      // 视频可以流畅播放
+      onCanplaythrough (e) {
+        this.$emit('canplaythrough', e)
       },
 
       // 视频播放中由于网络原因阻塞 展示loading
-      onWaiting () {
+      onWaiting (e) {
         this.showLoading = true
+        this.$emit('waiting', e)
       },
 
       // 缓冲后准备重新开始播放 隐藏loading
-      onPlaying () {
+      onPlaying (e) {
         this.showLoading = false
+        this.$emit('playing', e)
       },
 
       // 视频下载中 更新缓冲进度
-      onProgress () {
+      onProgress (e) {
         this.setBuffered()
+        this.$emit('progress', e)
       },
 
       // 视频总时长变化事件 修改显示视频总时长
-      onDurationChange () {
+      onDurationChange (e) {
         this.duration = this.$refs.video.duration
+        this.$emit('durationChange', e)
       },
 
       // 手动跳转开始事件 修改标志符并将跳转前播放过的进度加入已播放进度数组
-      onSeeking () {
+      onSeeking (e) {
         this.isSeeking = true
         this.addPlayedArray()
+        this.$emit('seeking', e)
       },
 
       // 手动跳转完成事件 修改标识符并修改本次播放开始时间
-      onSeeked () {
+      onSeeked (e) {
         this.isSeeking = false
         this.playedDuration.startTemp = this.currentTime
+        this.$emit('seeked', e)
       },
 
       // 当前播放时间变化事件 修改显示时间、播放进度百分比、刷新当前播放段进度
-      onTimeUpdate () {
+      onTimeUpdate (e) {
         this.currentTime = this.$refs.video.currentTime
         this.timeProcess = (this.$refs.video.currentTime / this.$refs.video.duration) * 100
         this.refreshPlayingDuration()
+        this.$emit('timeUpdate', e)
+      },
+
+      // 视频播放完成
+      onEnded (e) {
+        this.$emit('ended', e)
+      },
+
+      // 视频播放错误
+      onError (e) {
+        this.$emit('error', e)
+      },
+
+      // 播放速率改变
+      onRateChange (e) {
+        this.$emit('rateChange', e)
+      },
+
+      // 音量改变
+      onVolumeChange (e) {
+        this.$emit('volumeChange', e)
       },
 
       // 添加已播放进度数组

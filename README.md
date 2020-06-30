@@ -69,3 +69,8 @@ this.videoOptions.control.focusPreview.show = true
 this.$refs.videoControl.refreshOptions()
 ```
 Refresh the component options
+
+## Events
+
+#### play / pause / loadStart / canPlay / canplaythrough / waiting / playing / progress / durationChange / seeking / seeked / timeUpdate / ended / error / rateChange / volumeChange
+See [Media events](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events)
