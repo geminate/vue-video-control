@@ -10,7 +10,7 @@
     data () {
       return {
         videoOptions: {
-          src: 'https://www.w3school.com.cn/i/movie.ogg',
+          src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
           autoplay: false,
           poster: '',
           control: {
