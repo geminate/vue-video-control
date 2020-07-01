@@ -6,27 +6,29 @@
   top: 0;
   overflow: hidden;
 
+  &.pause .danmaku-item {
+    animation-play-state: paused;
+  }
+
+  .danmaku-row {
+    height: 25px;
+    position: relative;
+  }
+
   .danmaku-item {
+    font-size: 18px;
     position: absolute;
     left: 100%;
+    transform: translate(-100%, 0);
     top: 0;
     white-space: nowrap;
-    line-height: 25px;
     color: white;
     animation: danmaku 15s linear;
-
-    &.pause {
-      animation-play-state: paused;
-    }
   }
 }
 
 @keyframes danmaku {
-  from {
-    left: 100%;
-  }
-
   to {
-    left: -260px;
+    left: 0;
   }
 }

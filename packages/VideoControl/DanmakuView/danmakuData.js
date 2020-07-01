@@ -241,7 +241,7 @@ export const danmakuData = [
   },
   {
     id: 49,
-    text: '处别界前和年一。',
+    text: '12awvvvfvfv',
     time: 12
   },
   {

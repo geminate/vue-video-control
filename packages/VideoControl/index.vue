@@ -9,7 +9,9 @@
       <!-- 弹幕层 -->
       <danmaku-view :playStatus="playStatus"
                     :currentTime="currentTime"
-                    :rowNum="6"
+                    :rowNum="13"
+                    :fontSize="18"
+                    :speed="80"
       >
       </danmaku-view>
 
