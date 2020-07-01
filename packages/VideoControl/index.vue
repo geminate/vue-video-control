@@ -1,34 +1,43 @@
 <!-- 视频播放组件 -->
 <template>
   <div class="video-control" ref="videoControl">
+    <div class="video-container">
 
-    <!-- loading 标识 -->
-    <div class="loading iconfont icon-loading" v-show="showLoading"></div>
+      <!-- loading 标识 -->
+      <div class="loading iconfont icon-loading" v-show="showLoading"></div>
 
-    <!-- 视频主体 -->
-    <video ref="video"
-           :autoplay="opt.autoplay"
-           preload="auto"
-           :poster="opt.poster"
-           :src="opt.src"
-           @loadstart="onLoadStart"
-           @canplay="onCanPlay"
-           @canplaythrough="onCanplaythrough"
-           @durationchange="onDurationChange"
-           @timeupdate="onTimeUpdate"
-           @play="onPlay"
-           @pause="onPause"
-           @progress="onProgress"
-           @playing="onPlaying"
-           @waiting="onWaiting"
-           @seeking="onSeeking"
-           @seeked="onSeeked"
-           @ended="onEnded"
-           @error="onError"
-           @ratechange="onRateChange"
-           @volumechange="onVolumeChange"
-    >
-    </video>
+      <!-- 弹幕层 -->
+      <danmaku-view :playStatus="playStatus"
+                    :currentTime="currentTime"
+                    :rowNum="6"
+      >
+      </danmaku-view>
+
+      <!-- 视频主体 -->
+      <video ref="video"
+             :autoplay="opt.autoplay"
+             preload="auto"
+             :poster="opt.poster"
+             :src="opt.src"
+             @loadstart="onLoadStart"
+             @canplay="onCanPlay"
+             @canplaythrough="onCanplaythrough"
+             @durationchange="onDurationChange"
+             @timeupdate="onTimeUpdate"
+             @play="onPlay"
+             @pause="onPause"
+             @progress="onProgress"
+             @playing="onPlaying"
+             @waiting="onWaiting"
+             @seeking="onSeeking"
+             @seeked="onSeeked"
+             @ended="onEnded"
+             @error="onError"
+             @ratechange="onRateChange"
+             @volumechange="onVolumeChange"
+      >
+      </video>
+    </div>
 
     <!-- 控制组件 -->
     <div class="control-container" v-if="opt.control.show">
@@ -90,6 +99,7 @@
   import SpeedBtn from './SpeedBtn'
   import VolumeBtn from './VolumeBtn'
   import FullScreenBtn from './FullScreenBtn'
+  import DanmakuView from './DanmakuView'
   import { handleOptions } from './handleOptions'
 
   export default {
@@ -101,7 +111,8 @@
       SpeedBtn,
       VolumeBtn,
       FullScreenBtn,
-      FocusPreview
+      FocusPreview,
+      DanmakuView
     },
     props: ['options'],
     data () {
