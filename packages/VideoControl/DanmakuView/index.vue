@@ -3,6 +3,9 @@
   <div ref="danmakuView" class="danmaku-view" :class="[playStatus ? '' : 'pause' ]">
     <div v-for="(rowItem,row)  in currentDanmaku" :key="row" class="danmaku-row">
       <div class="danmaku-item"
+           :data-time="item.time"
+           :data-margin="item.margin"
+           :data-seeking="item.seeking"
            v-for="item in rowItem"
            :key="item.id"
            :style="{'animationDuration': animateTime + 's','fontSize':fontSize + 'px','left': 'calc( 100% + ' + fontSize * item.text.length + 'px )'}"
@@ -18,24 +21,40 @@
 
   export default {
     name: 'DanmakuView',
-    props: ['playStatus', 'currentTime', 'rowNum', 'fontSize', 'speed'],
+    props: ['playStatus', 'currentTime', 'rowNum', 'fontSize', 'speed', 'isSeeking'],
     data () {
       return {
         animateTime: 0,
         danmaku: new Map(),
-        currentDanmaku: Array.from({ length: this.rowNum + 1 }, x => Array.from({ length: 0 }, y => 0))
+        currentDanmaku: Array.from({ length: this.rowNum + 1 }, x => Array.from({ length: 0 }, y => 0)),
+        seekTemp: 0
       }
     },
     watch: {
 
       // 播放进度发生变化 实时添加新弹幕并删除旧弹幕
       currentTime (currentTime, oldTime) {
-        if (currentTime.toFixed(0) !== oldTime.toFixed(0)) {
+        if (currentTime.toFixed(0) !== oldTime.toFixed(0) && !this.isSeeking) {
           const danmakuArray = this.getCurrentTimeDanmakuArray(currentTime)
           while (danmakuArray.length > 0) {
             this.addDanmaku(danmakuArray.pop())
           }
           this.$nextTick(() => { this.cleanDanmaku() })
+        }
+      },
+
+      // 监听用户跳转进度
+      isSeeking (seeking) {
+        if (seeking === true) { //  用户触发 seek
+          this.seekTemp = this.currentTime
+        } else { // seek 结束
+          this.currentDanmaku = this.currentDanmaku.map((item) => {
+            return item.map((danmaku) => {
+              danmaku.time += this.currentTime - this.seekTemp
+              danmaku.margin = this.calcMargin(danmaku)
+              return danmaku
+            })
+          })
         }
       }
     },

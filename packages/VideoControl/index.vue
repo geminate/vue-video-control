@@ -12,6 +12,7 @@
                     :rowNum="13"
                     :fontSize="18"
                     :speed="80"
+                    :isSeeking="isSeeking"
       >
       </danmaku-view>
 
