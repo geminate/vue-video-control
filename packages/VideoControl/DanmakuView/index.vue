@@ -1,8 +1,11 @@
-<!-- 高能进度条 -->
+<!-- 弹幕展示区 -->
 <template>
-  <div ref="danmakuView" class="danmaku-view" :class="[playStatus ? '' : 'pause' ]">
+  <div ref="danmakuView" class="danmaku-view">
     <div v-for="(rowItem,row)  in currentDanmaku" :key="row" class="danmaku-row">
       <div class="danmaku-item"
+           :class="[playStatus && !item.pause ? '' : 'pause', item.pause ? 'top':'']"
+           @mouseenter="onMouseEnter(item)"
+           @mouseleave="onMouseLeave(item)"
            :data-time="item.time"
            :data-margin="item.margin"
            :data-seeking="item.seeking"
@@ -18,6 +21,7 @@
 
 <script>
   import { danmakuData } from './danmakuData'
+  import Vue from 'vue'
 
   export default {
     name: 'DanmakuView',
@@ -59,6 +63,14 @@
       }
     },
     methods: {
+
+      onMouseEnter (item) {
+        Vue.set(item, 'pause', true)
+      },
+
+      onMouseLeave (item) {
+        Vue.set(item, 'pause', false)
+      },
 
       // 获取当前时间秒数的弹幕数组
       getCurrentTimeDanmakuArray (currentTime) {

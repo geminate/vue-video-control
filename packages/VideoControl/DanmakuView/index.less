@@ -5,10 +5,7 @@
   left: 0;
   top: 0;
   overflow: hidden;
-
-  &.pause .danmaku-item {
-    animation-play-state: paused;
-  }
+  z-index: 99;
 
   .danmaku-row {
     height: 25px;
@@ -24,6 +21,15 @@
     white-space: nowrap;
     color: white;
     animation: danmaku 15s linear;
+    cursor: pointer;
+
+    &.pause {
+      animation-play-state: paused;
+    }
+
+    &.top {
+      z-index: 9999;
+    }
   }
 }
 
