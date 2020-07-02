@@ -17,12 +17,15 @@ $ npm install vue-video-control
 ## Getting Started
 
 * Import vue-video-control at main.js
+
 ```js
 import VideoControl from 'vue-video-control'
 
 Vue.use(VideoControl)
 ```
+
 * Set options at pages
+
 ```vue
 <template>
   <video-control ref="videoControl" class="video-control" :options="videoOptions"></video-control>
