@@ -26,6 +26,13 @@ const defaultOptions = {
     fullScreenBtn: {
       show: true
     }
+  },
+  danmaku: {
+    show: true,
+    fontSize: 25,
+    rowNum: 5,
+    speed: 80,
+    data: []
   }
 }
 

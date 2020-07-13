@@ -5,6 +5,8 @@
 </template>
 
 <script>
+  import { danmakuData } from './danmakuData'
+
   export default {
     name: 'App',
     data () {
@@ -37,6 +39,13 @@
             fullScreenBtn: {
               show: true
             }
+          },
+          danmaku: {
+            show: true,
+            fontSize: 25,
+            rowNum: 5,
+            speed: 80,
+            data: []
           }
         }
       }
@@ -54,10 +63,22 @@
         this.videoOptions.control.focusPreview.data = await test()
         this.videoOptions.control.focusPreview.show = true
         this.$refs.videoControl.refreshOptions()
+      },
+      async getDanmakuData () {
+        const test = () => {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(danmakuData)
+            }, 2000)
+          })
+        }
+        this.videoOptions.danmaku.data = await test()
+        this.$refs.videoControl.refreshOptions()
       }
     },
     mounted () {
       this.getFocusPreviewData()
+      this.getDanmakuData()
     }
   }
 </script>

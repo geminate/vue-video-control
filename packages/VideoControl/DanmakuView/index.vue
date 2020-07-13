@@ -1,17 +1,17 @@
 <!-- 弹幕展示区 -->
 <template>
   <div ref="danmakuView" class="danmaku-view">
-    <div v-for="(rowItem,row)  in currentDanmaku" :key="row" class="danmaku-row">
+    <div v-for="(rowItem,row)  in currentDanmaku" :key="row" class="danmaku-row"
+         :style="{height: fontSize * 1.3 + 'px'}">
       <div class="danmaku-item"
+           :ref="'row'+row"
            :class="[playStatus && !item.pause ? '' : 'pause', item.pause ? 'top':'']"
-           @mouseenter="onMouseEnter(item)"
-           @mouseleave="onMouseLeave(item)"
-           :data-time="item.time"
-           :data-margin="item.margin"
-           :data-seeking="item.seeking"
            v-for="item in rowItem"
            :key="item.id"
            :style="{'animationDuration': animateTime + 's','fontSize':fontSize + 'px','left': 'calc( 100% + ' + fontSize * item.text.length + 'px )'}"
+           @animationend="onAnimationEnd"
+           @mouseenter="onMouseEnter(item)"
+           @mouseleave="onMouseLeave(item)"
       >
         {{item.text}}
       </div>
@@ -20,46 +20,30 @@
 </template>
 
 <script>
-  import { danmakuData } from './danmakuData'
   import Vue from 'vue'
 
   export default {
     name: 'DanmakuView',
-    props: ['playStatus', 'currentTime', 'rowNum', 'fontSize', 'speed', 'isSeeking'],
+    props: ['playStatus', 'currentTime', 'rowNum', 'fontSize', 'speed', 'danmakuData'],
     data () {
       return {
-        animateTime: 0,
-        danmaku: new Map(),
-        currentDanmaku: Array.from({ length: this.rowNum + 1 }, x => Array.from({ length: 0 }, y => 0)),
-        seekTemp: 0
+        animateTime: 0, // 动画时长
+        danmakuMap: new Map(), // 弹幕按照整数秒数划分 map
+        currentDanmaku: Array.from({ length: this.rowNum + 1 }, () => Array.from({ length: 0 }, () => 0)) // 已经和正在播放的弹幕数组
       }
     },
     watch: {
 
       // 播放进度发生变化 实时添加新弹幕并删除旧弹幕
       currentTime (currentTime, oldTime) {
-        if (currentTime.toFixed(0) !== oldTime.toFixed(0) && !this.isSeeking) {
-          const danmakuArray = this.getCurrentTimeDanmakuArray(currentTime)
-          while (danmakuArray.length > 0) {
-            this.addDanmaku(danmakuArray.pop())
-          }
-          this.$nextTick(() => { this.cleanDanmaku() })
+        if (Math.floor(currentTime) !== Math.floor(oldTime)) {
+          const danmakuArray = [...this.getCurrentTimeDanmakuArray(currentTime)]
+          this.addDanmaku(danmakuArray)
         }
       },
 
-      // 监听用户跳转进度
-      isSeeking (seeking) {
-        if (seeking === true) { //  用户触发 seek
-          this.seekTemp = this.currentTime
-        } else { // seek 结束
-          this.currentDanmaku = this.currentDanmaku.map((item) => {
-            return item.map((danmaku) => {
-              danmaku.time += this.currentTime - this.seekTemp
-              danmaku.margin = this.calcMargin(danmaku)
-              return danmaku
-            })
-          })
-        }
+      danmakuData () {
+        this.danmakuMap = this.groupDanmakuByTime(this.danmakuData)
       }
     },
     methods: {
@@ -74,36 +58,30 @@
 
       // 获取当前时间秒数的弹幕数组
       getCurrentTimeDanmakuArray (currentTime) {
-        return this.danmaku.get(Number(currentTime.toFixed(0))) || []
+        return this.danmakuMap.get(Math.floor(currentTime)) || []
       },
 
       // 添加弹幕 margin 用来控制弹幕左右间距
-      addDanmaku (danmaku) {
-        const obj = {
-          ...danmaku,
-          margin: this.calcMargin(danmaku)
-        }
+      addDanmaku (danmakuArray) {
         for (let i = 0; i <= this.rowNum - 1; i++) {
-          if (this.currentDanmaku[i].length === 0 || (this.currentDanmaku[i].length > 0 && (danmaku.time > this.currentDanmaku[i][this.currentDanmaku[i].length - 1].margin))) {
-            this.currentDanmaku[i].push(obj)
-            break
+          if (!this.$refs['row' + i] || this.$refs['row' + i].length === 0) { // 还没有这个行
+            const item = danmakuArray.shift()
+            item && this.currentDanmaku[i].push(item)
+          } else { // 该行最后一个弹幕元素已经移入屏幕超过 100px 可以添加新弹幕
+            const lastItem = this.$refs['row' + i][this.$refs['row' + i].length - 1].getBoundingClientRect()
+            const container = this.$refs.danmakuView.getBoundingClientRect()
+            if (container.width - (lastItem.x - container.x) > lastItem.width + 100) {
+              const item = danmakuArray.shift()
+              item && this.currentDanmaku[i].push(item)
+            }
           }
         }
       },
 
-      // 计算 弹幕间距时间
-      calcMargin (danmaku) {
-        const textLength = this.fontSize * danmaku.text.length
-        return danmaku.time + (textLength + 50) / this.speed
-      },
-
-      // 清除过期弹幕
-      cleanDanmaku () {
-        this.currentDanmaku = this.currentDanmaku.map((item) => {
-          return item.filter((danmaku) => {
-            return this.currentTime - danmaku.time < 12
-          })
-        })
+      // 弹幕动画完成销毁 dom
+      onAnimationEnd (e) {
+        const dom = e.target
+        dom.parentNode.removeChild(dom)
       },
 
       // 弹幕数组按照时间秒数分组
@@ -111,22 +89,15 @@
         const map = new Map()
         list.forEach((item) => {
           if (map.has(item.time)) {
-            map.get(item.time).push({
-              ...item,
-              time: item.time + Math.random()
-            })
+            map.get(item.time).push(item)
           } else {
-            map.set(item.time, [{
-              ...item,
-              time: item.time + Math.random()
-            }])
+            map.set(item.time, [item])
           }
         })
         return map
       }
     },
     mounted () {
-      this.danmaku = this.groupDanmakuByTime(danmakuData)
       this.animateTime = this.$refs.danmakuView.getBoundingClientRect().width / this.speed
     }
   }
