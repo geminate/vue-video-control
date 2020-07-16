@@ -1,7 +1,7 @@
 {
   "name": "vue-video-control",
-  "version": "0.2.1",
-  "description": "A html5 video player component of vue. Include video controller / video preview / power progress bar and so on",
+  "version": "0.3.1",
+  "description": "A html5 video player component of vue. Include video controller / video preview / power progress bar / danmaku and so on",
   "private": false,
   "main": "dist/vue-video-control.umd.js",
   "author": "geminate",

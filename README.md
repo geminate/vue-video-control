@@ -3,7 +3,7 @@ vue-video-control [![npm](https://img.shields.io/npm/v/vue-video-control)](https
 
 A html5 video player component of vue. 
 
-Include video controller / video preview / power progress bar and so on
+Include video controller / video preview / power progress bar / danmaku and so on
 
 ## Install
 
@@ -62,6 +62,13 @@ Vue.use(VideoControl)
 | control.speedBtn.speedArray    | array    | [0.5, 0.75, 1, 1.5, 2] | Playback speed options
 | control.volumeBtn.show         | boolean  | true                   | Display the button to change volume
 | control.fullScreenBtn.show     | boolean  | true                   | Display the button to toggle full screen
+| danmaku.show                   | boolean  | true                   | Display the danmaku and danmaku control
+| danmaku.fontSize               | number   | 25                     | The font size of danmaku
+| danmaku.rowNum                 | number   | 5                      | The maximum number of lines of danmaku
+| danmaku.speed                  | number   | 80                     | Rolling speed of danmaku
+| danmaku.data                   | array    | []                     | Danmaku data array
+| danmaku.onSendDanmaku          | Function |                        | Triggered after the danmaku is sent
+
 
 ## Methods
 
