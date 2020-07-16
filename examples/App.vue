@@ -43,9 +43,12 @@
           danmaku: {
             show: true,
             fontSize: 25,
-            rowNum: 5,
+            rowNum: 9,
             speed: 80,
-            data: []
+            data: [],
+            onSendDanmaku: ({ danmaku, time }) => {
+              console.log(danmaku, time)
+            }
           }
         }
       }

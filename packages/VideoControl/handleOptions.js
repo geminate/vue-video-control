@@ -32,7 +32,10 @@ const defaultOptions = {
     fontSize: 25,
     rowNum: 5,
     speed: 80,
-    data: []
+    data: [],
+    onSendDanmaku: ({ danmaku, time }) => {
+      console.log(`Send Danmaku: ${danmaku} ,time: ${time}`)
+    }
   }
 }
 

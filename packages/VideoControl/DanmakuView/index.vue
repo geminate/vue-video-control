@@ -44,6 +44,7 @@
 
       danmakuData () {
         this.danmakuMap = this.groupDanmakuByTime(this.danmakuData)
+        console.log(this.danmakuMap)
       }
     },
     methods: {
@@ -63,16 +64,22 @@
 
       // 添加弹幕 margin 用来控制弹幕左右间距
       addDanmaku (danmakuArray) {
-        for (let i = 0; i <= this.rowNum - 1; i++) {
+        for (let i = 0; i <= this.rowNum - 1 && danmakuArray.length > 0; i++) {
           if (!this.$refs['row' + i] || this.$refs['row' + i].length === 0) { // 还没有这个行
             const item = danmakuArray.shift()
-            item && this.currentDanmaku[i].push(item)
+            item && this.currentDanmaku[i].push({
+              ...item,
+              id: item.id + new Date().getTime()
+            })
           } else { // 该行最后一个弹幕元素已经移入屏幕超过 100px 可以添加新弹幕
             const lastItem = this.$refs['row' + i][this.$refs['row' + i].length - 1].getBoundingClientRect()
             const container = this.$refs.danmakuView.getBoundingClientRect()
             if (container.width - (lastItem.x - container.x) > lastItem.width + 100) {
               const item = danmakuArray.shift()
-              item && this.currentDanmaku[i].push(item)
+              item && this.currentDanmaku[i].push({
+                ...item,
+                id: item.id + new Date().getTime()
+              })
             }
           }
         }
@@ -88,6 +95,7 @@
       groupDanmakuByTime (list) {
         const map = new Map()
         list.forEach((item) => {
+          item.time = Math.floor(item.time)
           if (map.has(item.time)) {
             map.get(item.time).push(item)
           } else {
@@ -95,6 +103,30 @@
           }
         })
         return map
+      },
+
+      // 用户发送弹幕
+      sendDanmaku (danmaku) {
+        const danmakuItem = {
+          id: this.getUid(),
+          text: danmaku,
+          time: Math.floor(this.currentTime),
+          isSelf: true
+        }
+        if (this.danmakuMap.has(danmakuItem.time)) {
+          this.danmakuMap.get(danmakuItem.time).push(danmakuItem)
+        } else {
+          this.danmakuMap.set(danmakuItem.time, [danmakuItem])
+        }
+        this.addDanmaku([danmakuItem])
+      },
+
+      // 唯一标识
+      getUid () {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+          const r = Math.random() * 16 | 0
+          return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+        })
       }
     },
     mounted () {

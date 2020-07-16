@@ -7,7 +7,8 @@
       <div class="loading iconfont icon-loading" v-show="showLoading"></div>
 
       <!-- 弹幕层 -->
-      <danmaku-view :playStatus="playStatus"
+      <danmaku-view ref="danmakuView"
+                    :playStatus="playStatus"
                     :currentTime="currentTime"
                     :rowNum="opt.danmaku.rowNum"
                     :fontSize="opt.danmaku.fontSize"
@@ -69,6 +70,12 @@
                    :currentTime="currentTime">
       </video-timer>
 
+      <!-- 弹幕控制 -->
+      <danmaku-control class="danmaku-control"
+                       @sendDanmaku="onSendDanmaku"
+      >
+      </danmaku-control>
+
       <div style="flex:1 1 auto"></div>
 
       <!-- 播放速率 -->
@@ -99,6 +106,7 @@
   import PlayBtn from './PlayBtn'
   import VideoTimer from './VideoTimer'
   import ProgressBar from './ProgressBar'
+  import DanmakuControl from './DanmakuControl'
   import SpeedBtn from './SpeedBtn'
   import VolumeBtn from './VolumeBtn'
   import FullScreenBtn from './FullScreenBtn'
@@ -111,6 +119,7 @@
       PlayBtn,
       VideoTimer,
       ProgressBar,
+      DanmakuControl,
       SpeedBtn,
       VolumeBtn,
       FullScreenBtn,
@@ -289,6 +298,15 @@
       setCurrentTime (val) {
         this.timeProcess = val
         this.$refs.video.currentTime = (this.$refs.video.duration * val) / 100
+      },
+
+      // 弹幕发送事件
+      onSendDanmaku (danmaku) {
+        this.$refs.danmakuView.sendDanmaku(danmaku)
+        this.opt.danmaku.onSendDanmaku({
+          danmaku,
+          time: this.currentTime
+        })
       }
     },
     created () {
