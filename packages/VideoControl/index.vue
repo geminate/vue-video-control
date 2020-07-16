@@ -8,6 +8,7 @@
 
       <!-- 弹幕层 -->
       <danmaku-view ref="danmakuView"
+                    v-if="opt.danmaku.show"
                     :playStatus="playStatus"
                     :currentTime="currentTime"
                     :rowNum="opt.danmaku.rowNum"
@@ -73,6 +74,7 @@
       <!-- 弹幕控制 -->
       <danmaku-control class="danmaku-control"
                        @sendDanmaku="onSendDanmaku"
+                       v-if="opt.danmaku.show"
       >
       </danmaku-control>
 

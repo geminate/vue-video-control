@@ -44,7 +44,6 @@
 
       danmakuData () {
         this.danmakuMap = this.groupDanmakuByTime(this.danmakuData)
-        console.log(this.danmakuMap)
       }
     },
     methods: {
